@@ -42,6 +42,9 @@ execute "disable_default_vhost" do
   command "cd /etc/apache2/sites-available && a2dissite default && rm default"
   action :run
   notifies :reload, "service[apache2]"
+  not_if do
+    !File.exists?("/etc/apache2/sites-available/default")
+  end
 end
 
 
