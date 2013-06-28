@@ -37,6 +37,14 @@ directory node[:apache][:apps_root] do
 end
 
 
+#disable and remove the default vhost
+execute "disable_default_vhost" do
+  command "cd /etc/apache2/sites-available && a2dissite default && rm default"
+  action :run
+  notifies :reload, "service[apache2]"
+end
+
+
 #create the dirs for all our hosted sites
 node[:apache][:sites].each do |site|
   
