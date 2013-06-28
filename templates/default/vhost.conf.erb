@@ -10,7 +10,7 @@
   <%- end -%>
 
 
-  Directory <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>>
+  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %> >
     AllowOverride All
   </Directory>
 
