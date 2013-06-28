@@ -1,0 +1,64 @@
+<VirtualHost *:80>
+
+  # Admin email, Server Name (domain name) and any aliases
+  ServerAdmin <%= @node[:apache][:webmaster] %>
+  ServerName  <%= @domain %>
+  ServerAlias www.<%= @domain %>
+  <%- @aka.each do |aka| -%>
+  ServerAlias <%= aka %>
+  ServerAlias www.<%= aka %>
+  <%- end -%>
+
+
+  Directory <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>>
+    AllowOverride All
+  </Directory>
+
+  # Index file and Document Root (where the public files are located)
+  DirectoryIndex index.php index.html index.htm
+  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>
+
+
+  # Custom log file locations
+  LogLevel warn
+  ErrorLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "error.log") %>
+  CustomLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "access.log") %> combined
+
+</VirtualHost>
+
+<%- if @enable_ssl == true -%>
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+
+  ServerAdmin <%= @node[:apache][:webmaster] %>
+  ServerName  <%= @domain %>
+  ServerAlias www.<%= @domain %>
+  <%- @aka.each do |aka| -%>
+  ServerAlias <%= aka %>
+  ServerAlias www.<%= aka %>
+  <%- end -%>
+
+  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>
+  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>>
+    Options -Indexes
+    AllowOverride None
+    Order deny,allow
+    Allow from all
+    AddOutputFilterbyType DEFLATE text/html
+    FileEtag none
+  </Directory>
+
+  LogLevel warn
+  ErrorLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "error-ssl.log") %>
+  CustomLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "access-ssl.log") %> combined
+
+  SSLEngine on
+  SSLCertificateFile    /etc/ssl/<%= @dir_name %>/<%= @domain %>.crt
+  SSLCertificateKeyFile /etc/ssl/<%= @dir_name %>/<%= @domain %>.key
+  BrowserMatch ".*MSIE.*" \
+          nokeepalive ssl-unclean-shutdown \
+          downgrade-1.0 force-response-1.0
+
+</VirtualHost>
+</IfModule>
+<%- end -%>
