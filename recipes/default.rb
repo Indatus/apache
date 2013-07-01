@@ -66,7 +66,7 @@ node[:apache][:sites].each do |site|
   end #end directory
   
   #create nested site directories
-  [File.join(site_dir, 'public'), File.join(site_dir, 'log')].each do |dir|
+  [File.join(site_dir, 'public')].each do |dir|
     directory dir do 
       owner node[:apache][:owner]
     	group node[:apache][:group]

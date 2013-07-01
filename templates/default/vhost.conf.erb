@@ -21,8 +21,7 @@
 
   # Custom log file locations
   LogLevel warn
-  ErrorLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "error.log") %>
-  CustomLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "access.log") %> combined
+  CustomLog /var/log/apache2/<%= @domain %>.log combined
 
 </VirtualHost>
 
