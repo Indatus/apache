@@ -28,6 +28,7 @@ end
 template "/etc/apache2/envvars" do
   mode 0644
   source "envvars.erb"
+  notifies :restart, "service[apache2]"
 end
 
 #create the apache lock dir, and change premissions, 
