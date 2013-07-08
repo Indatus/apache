@@ -24,6 +24,24 @@ end
   end
 end
 
+#configure the apache envvars
+template "/etc/apache2/envvars" do
+  mode 0644
+  source "envvars.erb"
+end
+
+#create the apache lock dir, and change premissions, 
+#but not if it doesn't exist already
+directory "/var/lock/apache2" do
+  owner node[:apache][:owner]
+  group node[:apache][:group]
+  recursive true
+  mode 0755
+  not_if do 
+    !File.exists?("/var/lock/apache2")
+  end
+end
+
 
 #create the web apps root dir
 directory node[:apache][:apps_root] do
@@ -132,7 +150,7 @@ end #end sites.each
 
 
 
-#set server time to Eastern
+#set server time to UTC
 link "/etc/localtime" do
-  to "/usr/share/zoneinfo/EST5EDT"
+  to "/usr/share/zoneinfo/UTC"
 end
