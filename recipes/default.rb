@@ -148,10 +148,3 @@ node[:apache][:sites].each do |site|
   end
   
 end #end sites.each
-
-
-
-#set server time to UTC
-link "/etc/localtime" do
-  to "/usr/share/zoneinfo/UTC"
-end
