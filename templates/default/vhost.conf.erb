@@ -10,18 +10,22 @@
   <%- end -%>
 
 
-  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %> >
+  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %> >
     AllowOverride All
+    Order deny,allow
+    Allow from all
   </Directory>
 
   # Index file and Document Root (where the public files are located)
   DirectoryIndex index.php index.html index.htm
-  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>
+  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %>
 
 
   # Custom log file locations
   LogLevel warn
   CustomLog /var/log/apache2/<%= @domain %>.log combined
+
+  RewriteEngine on
 
 </VirtualHost>
 
@@ -37,19 +41,22 @@
   ServerAlias www.<%= aka %>
   <%- end -%>
 
-  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>
-  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, "public") %>>
-    Options -Indexes
-    AllowOverride None
+  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %> >
+    AllowOverride All
     Order deny,allow
     Allow from all
-    AddOutputFilterbyType DEFLATE text/html
-    FileEtag none
   </Directory>
 
+  # Index file and Document Root (where the public files are located)
+  DirectoryIndex index.php index.html index.htm
+  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %>
+
+
+  # Custom log file locations
   LogLevel warn
-  ErrorLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "error-ssl.log") %>
-  CustomLog <%= File.join(@node[:apache][:apps_root], @dir_name, "log", "access-ssl.log") %> combined
+  CustomLog /var/log/apache2/<%= @domain %>.log combined
+
+  RewriteEngine on
 
   SSLEngine on
   SSLCertificateFile    /etc/ssl/<%= @dir_name %>/<%= @domain %>.crt

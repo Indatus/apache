@@ -70,7 +70,7 @@ end
 #create the dirs for all our hosted sites
 node[:apache][:sites].each do |site|
   
-  dir_name = site[:domain].downcase.gsub(/[^\w\.\_]/,'-').gsub(".", "_")
+  dir_name = site[:domain].downcase.gsub(/[^\w\.\_]/,'-')
   site_dir = File.join(node[:apache][:apps_root], dir_name)
   
   #create the directory for the site
@@ -85,7 +85,7 @@ node[:apache][:sites].each do |site|
   end #end directory
   
   #create nested site directories
-  [File.join(site_dir, 'public')].each do |dir|
+  [File.join(site_dir, node[:apache][:web_root])].each do |dir|
     directory dir do 
       owner node[:apache][:owner]
     	group node[:apache][:group]
