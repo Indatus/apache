@@ -10,7 +10,7 @@
   <%- end -%>
 
 
-  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %> >
+  <Directory <%= @web_root %>
     AllowOverride All
     Order deny,allow
     Allow from all
@@ -18,7 +18,7 @@
 
   # Index file and Document Root (where the public files are located)
   DirectoryIndex index.php index.html index.htm
-  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %>
+  DocumentRoot <%= @web_root %>
 
 
   # Custom log file locations
@@ -41,7 +41,7 @@
   ServerAlias www.<%= aka %>
   <%- end -%>
 
-  <Directory <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %> >
+  <Directory <%= @web_root %>
     AllowOverride All
     Order deny,allow
     Allow from all
@@ -49,7 +49,7 @@
 
   # Index file and Document Root (where the public files are located)
   DirectoryIndex index.php index.html index.htm
-  DocumentRoot <%= File.join(@node[:apache][:apps_root], @dir_name, @node[:apache][:web_root]) %>
+  DocumentRoot <%= @web_root %>
 
 
   # Custom log file locations

@@ -87,9 +87,15 @@ node[:apache][:sites].each do |site|
   		File.exists?(site_dir)
   	end
   end #end directory
-  
+ 
+  unless site[:web_root].nil?
+    web_root = File.join(site_dir, site[:web_root])
+  else
+    web_root = File.join(site_dir, node[:apache][:web_root])
+  end
+
   #create nested site directories
-  [File.join(site_dir, node[:apache][:web_root])].each do |dir|
+  [web_root].each do |dir|
     directory dir do 
       owner node[:apache][:owner]
     	group node[:apache][:group]
@@ -107,7 +113,7 @@ node[:apache][:sites].each do |site|
   template vhost_path do
     mode 0644
     source "vhost.conf.erb"
-    variables site.merge(:dir_name => dir_name)
+    variables site.merge(:web_root => web_root, :dir_name => dir_name)
   end
   
   #create SSL dirs if necessary
