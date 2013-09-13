@@ -70,7 +70,11 @@ end
 #create the dirs for all our hosted sites
 node[:apache][:sites].each do |site|
   
-  dir_name = site[:domain].downcase.gsub(/[^\w\.\_]/,'-')
+  if node[:apache][:app_dir].nil?
+    dir_name = node[:apache][:app_dir]
+  else 
+    dir_name = site[:domain].downcase.gsub(/[^\w\.\_]/,'-')
+  end
   site_dir = File.join(node[:apache][:apps_root], dir_name)
   
   #create the directory for the site
