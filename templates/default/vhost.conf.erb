@@ -10,7 +10,7 @@
   <%- end -%>
 
 
-  <Directory <%= @web_root %>
+  <Directory <%= @web_root %> >
     AllowOverride All
     Order deny,allow
     Allow from all
@@ -41,7 +41,7 @@
   ServerAlias www.<%= aka %>
   <%- end -%>
 
-  <Directory <%= @web_root %>
+  <Directory <%= @web_root %> >
     AllowOverride All
     Order deny,allow
     Allow from all
