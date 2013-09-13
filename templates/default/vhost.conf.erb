@@ -59,8 +59,8 @@
   RewriteEngine on
 
   SSLEngine on
-  SSLCertificateFile    /etc/ssl/<%= @dir_name %>/<%= @domain %>.crt
-  SSLCertificateKeyFile /etc/ssl/<%= @dir_name %>/<%= @domain %>.key
+  SSLCertificateFile    /etc/ssl/<%= @domain_string %>/<%= @domain %>.crt
+  SSLCertificateKeyFile /etc/ssl/<%= @domain_string %>/<%= @domain %>.key
   BrowserMatch ".*MSIE.*" \
           nokeepalive ssl-unclean-shutdown \
           downgrade-1.0 force-response-1.0

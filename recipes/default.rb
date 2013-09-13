@@ -70,10 +70,12 @@ end
 #create the dirs for all our hosted sites
 node[:apache][:sites].each do |site|
   
+  domain_string = site[:domain].downcase.gsub(/[^\w\.\_]/,'-')
+
   unless site[:app_dir].nil?
     dir_name = site[:app_dir]
   else 
-    dir_name = site[:domain].downcase.gsub(/[^\w\.\_]/,'-')
+    dir_name = domain_string
   end
   site_dir = File.join(node[:apache][:apps_root], dir_name)
   
@@ -109,27 +111,30 @@ node[:apache][:sites].each do |site|
   
   
   #create a vhost config file for each site
-  vhost_path = "/etc/apache2/sites-available/#{dir_name}.conf"
+  vhost_path = "/etc/apache2/sites-available/#{domain_string}.conf"
   template vhost_path do
     mode 0644
     source "vhost.conf.erb"
-    variables site.merge(:web_root => web_root, :dir_name => dir_name)
+    variables site.merge(
+      :web_root => web_root, 
+      :dir_name => dir_name, 
+      :domain_string => domain_string)
   end
   
   #create SSL dirs if necessary
   if site[:enable_ssl] == true
-    directory "/etc/ssl/#{dir_name}" do 
+    directory "/etc/ssl/#{domain_string}" do 
       owner node[:apache][:owner]
       group node[:apache][:group]
     	recursive true
     	mode 0644
     	not_if do 
-    		File.exists?("/etc/ssl/#{dir_name}")
+    		File.exists?("/etc/ssl/#{domain_string}")
     	end
     end #end directory
     
     #move over the ssl certs if they are present
-    cookbook_file "/etc/ssl/#{dir_name}/#{site[:domain]}.crt" do
+    cookbook_file "/etc/ssl/#{domain_string}/#{site[:domain]}.crt" do
       owner node[:apache][:owner]
       group node[:apache][:group]
       mode 0644
@@ -137,7 +142,7 @@ node[:apache][:sites].each do |site|
       backup 1
     end
     
-    cookbook_file "/etc/ssl/#{dir_name}/#{site[:domain]}.key" do
+    cookbook_file "/etc/ssl/#{domain_string}/#{site[:domain]}.key" do
       owner node[:apache][:owner]
       group node[:apache][:group]
       mode 0644
@@ -149,7 +154,7 @@ node[:apache][:sites].each do |site|
   
   #enable the vhost
   execute "enable_vhost" do
-   	command "cd /etc/apache2/sites-available && a2ensite #{dir_name}.conf"
+   	command "cd /etc/apache2/sites-available && a2ensite #{domain_string}.conf"
   	action :run
   	notifies :reload, "service[apache2]"
   	not_if do
