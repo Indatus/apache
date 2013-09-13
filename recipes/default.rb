@@ -70,8 +70,8 @@ end
 #create the dirs for all our hosted sites
 node[:apache][:sites].each do |site|
   
-  if node[:apache][:app_dir].nil?
-    dir_name = node[:apache][:app_dir]
+  unless site[:app_dir].nil?
+    dir_name = site[:app_dir]
   else 
     dir_name = site[:domain].downcase.gsub(/[^\w\.\_]/,'-')
   end
