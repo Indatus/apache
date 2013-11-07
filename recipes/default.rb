@@ -66,6 +66,15 @@ execute "disable_default_vhost" do
   end
 end
 
+execute "disable_default_vhost_ssl" do
+  command "cd /etc/apache2/sites-available && a2dissite default-ssl && rm default-ssl"
+  action :run
+  notifies :reload, "service[apache2]"
+  not_if do
+    !File.exists?("/etc/apache2/sites-available/default-ssl")
+  end
+end
+
 
 #create the dirs for all our hosted sites
 node[:apache][:sites].each do |site|
