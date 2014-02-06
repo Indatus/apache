@@ -31,6 +31,13 @@ template "/etc/apache2/envvars" do
   notifies :restart, "service[apache2]"
 end
 
+#configure the apache config
+template "/etc/apache2/apache2.conf" do
+  mode 0644
+  source "apache2.conf.erb"
+  notifies :restart, "service[apache2]"
+end
+
 #create the apache lock dir, and change premissions, 
 #but not if it doesn't exist already
 directory "/var/lock/apache2" do
