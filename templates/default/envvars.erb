@@ -35,3 +35,7 @@ export LANG
 ## If you need a higher file descriptor limit, uncomment and adjust the
 ## following line (default is 8192):
 #APACHE_ULIMIT_MAX_FILES='ulimit -n 65536'
+
+<%- @node[:apache][:env_vars].each do |var,val| -%>
+export <%= var.upcase %>=<%= val %>
+<%- end -%>

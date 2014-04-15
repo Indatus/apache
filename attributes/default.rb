@@ -5,6 +5,8 @@ default[:apache][:owner] = "www-data"
 default[:apache][:group] = "www-data"
 default[:apache][:sites] = [{:domain => 'localhost.dev', :aka => [], :app_dir => nil, :web_root => nil, :enable_ssl => false}]
 
+default[:apache][:env_vars] = {} #misc env vars for apache
+
 default[:apache][:timeout] = 300
 default[:apache][:keep_alive] = 'On'
 default[:apache][:max_keep_alive_requests] = 100
