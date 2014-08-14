@@ -61,6 +61,7 @@
   SSLEngine on
   SSLCertificateFile    /etc/ssl/<%= @domain_string %>/<%= @domain %>.crt
   SSLCertificateKeyFile /etc/ssl/<%= @domain_string %>/<%= @domain %>.key
+  SSLCertificateChainFile /etc/ssl/<%= @domain_string %>/<%= @domain %>.ca.crt
   BrowserMatch ".*MSIE.*" \
           nokeepalive ssl-unclean-shutdown \
           downgrade-1.0 force-response-1.0
