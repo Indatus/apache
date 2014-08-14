@@ -67,7 +67,7 @@ end
 execute "disable_default_vhost" do
   command "cd /etc/apache2/sites-available && a2dissite default && rm default"
   action :run
-  notifies :reload, "service[apache2]"
+  notifies :restart, "service[apache2]"
   not_if do
     !File.exists?("/etc/apache2/sites-available/default")
   end
@@ -76,7 +76,7 @@ end
 execute "disable_default_vhost_ssl" do
   command "cd /etc/apache2/sites-available && a2dissite default-ssl && rm default-ssl"
   action :run
-  notifies :reload, "service[apache2]"
+  notifies :restart, "service[apache2]"
   not_if do
     !File.exists?("/etc/apache2/sites-available/default-ssl")
   end
@@ -172,7 +172,7 @@ node[:apache][:sites].each do |site|
   execute "enable_vhost" do
    	command "cd /etc/apache2/sites-available && a2ensite #{domain_string}.conf"
   	action :run
-  	notifies :reload, "service[apache2]"
+  	notifies :restart, "service[apache2]"
   	not_if do
     	File.exists?(vhost_path.gsub("sites-available", "sites-enabled"))
   	end
