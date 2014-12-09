@@ -1,3 +1,4 @@
+name             'apache'
 maintainer       'Brian Webb'
 maintainer_email 'bwebb@indatus.com'
 description       "Configures apache"
