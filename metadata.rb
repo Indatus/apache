@@ -3,7 +3,6 @@ maintainer       'Indatus'
 maintainer_email 'devops@indatus.com'
 description       "Configures apache"
 license 	  'Apache v2.0'
-version           "1.0"
 supports          'ubuntu'
 supports 	  'debian'
 supports	  'centos'
