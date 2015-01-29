@@ -1,5 +1,5 @@
 #install apache
-%w(httpd httpd-tools mod_ssl openssl openssl-devel openssl-static).each do |pkg|
+%w(httpd httpd-tools mod_ssl openssl openssl-devel openssl-static vim curl git-core git-svn).each do |pkg|
   package pkg do
     action :install
   end
