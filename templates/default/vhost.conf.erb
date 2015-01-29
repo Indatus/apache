@@ -23,7 +23,12 @@
 
   # Custom log file locations
   LogLevel warn
+  <% case node['platform_family'] -%>
+  <% when "debian" -%>
   CustomLog /var/log/apache2/<%= @domain %>.log combined
+  <% when "rhel" -%>
+  CustomLog /var/log/httpd/<%= @domain %>.log combined
+  <% end -%>
 
   RewriteEngine on
 
@@ -54,7 +59,12 @@
 
   # Custom log file locations
   LogLevel warn
+  <% case node['platform_family'] -%>
+  <% when "debian" -%> 
   CustomLog /var/log/apache2/<%= @domain %>.log combined
+  <% when "rhel" -%>
+  CustomLog /var/log/httpd/<%= @domain %>.log combined
+  <% end -%>
 
   RewriteEngine on
 
